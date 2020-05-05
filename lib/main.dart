@@ -24,6 +24,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+// DRAWER/TABS
+
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.red[400],
             ),
             ListTile(
-              title: Text('Add Books'),
+              title: Text(
+                  'Add Books',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Courier',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -65,7 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.red[400],
             ),
             ListTile(
-              title: Text('Bookshelf'),
+              title: Text(
+                  'Bookshelf',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Courier',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
               },
@@ -74,7 +90,14 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.red[400],
             ),
             ListTile(
-              title: Text('Ratings'),
+              title: Text(
+                  'Ratings',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Courier',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
               },
