@@ -11,9 +11,7 @@ class _BookshelfState extends State<Bookshelf> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar(),
-      drawer: getDrawer(context),
-      body: Text('next page'),
+      body: Text('bookshelf'),
     );
   }
 }

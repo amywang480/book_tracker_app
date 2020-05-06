@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'bookshelf.dart';
+import 'ratings.dart';
+import 'add_books.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,12 +20,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// BOOK OBJECT
-class Book {
-  String title, url;
-  Book(this.title, this.url);
-}
-
 // HOME PAGE
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -31,161 +28,70 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-// APP BAR
-AppBar getAppBar() {
-  return AppBar(
-    title: Text(
-      'Bibliofila',
-      style: TextStyle(
-        fontFamily: 'Playfair',
-        fontSize: 40.0,
-      ),
-    ),
-  );
-}
-
 // BOTTOM NAV BAR
-BottomNavigationBar getNavBar() {
-  return BottomNavigationBar(
-    currentIndex: 0, // this will be set when a new tab is tapped
-    items: [
+List<BottomNavigationBarItem> getIcons() {
+  return [
       BottomNavigationBarItem(
         icon: new Icon(Icons.book),
         title: new Text('Add Books'),
+        backgroundColor: Colors.cyan,
       ),
       BottomNavigationBarItem(
         icon: new Icon(Icons.collections_bookmark),
         title: new Text('Bookshelf'),
+        backgroundColor: Colors.cyan,
       ),
       BottomNavigationBarItem(
-          icon: Icon(Icons.star_border),
-          title: Text('Ratings')
-      )
-    ],
-  );
+        icon: Icon(Icons.star_border),
+        title: Text('Ratings'),
+        backgroundColor: Colors.cyan,
+      ),
+    ];
 }
 
-// DRAWER
-Drawer getDrawer(BuildContext context) {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        Container(
-          height: 200,
-          child: DrawerHeader(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/logo.png"),
-              ),
-            ),
-          ),
-        ),
-        Divider(
-          color: Colors.red[400],
-        ),
-        ListTile(
-          title: Text(
-            'Add Books',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Courier',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyHomePage()),
-            );
-          },
-        ),
-        Divider(
-          color: Colors.red[400],
-        ),
-        ListTile(
-          title: Text(
-            'Bookshelf',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Courier',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Bookshelf()),
-            );
-          },
-        ),
-        Divider(
-          color: Colors.red[400],
-        ),
-        ListTile(
-          title: Text(
-            'Ratings',
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: 'Courier',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            },
-        ),
-        Divider(
-          color: Colors.red[400],
-        ),
-      ],
-    ),
-  );
+// BOOK OBJECT
+class Book {
+  String title, url;
+  Book(this.title, this.url);
 }
 
-// ADD BOOKS
 class _MyHomePageState extends State<MyHomePage> {
+  int selectedPage = 0;
+
+  final pageOptions = [
+    AddBooks(),
+    Bookshelf(),
+    Ratings(),
+  ];
+
   List<Book> _items = new List();
-  //final subject = new PublishSubject<String>();
+  final subject = new PublishSubject<String>();
   bool _isLoading = false;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/bg1.jpg'),
-          //colorFilter: new ColorFilter.mode(Colors.white.withOpacity(0.93), BlendMode.dstATop),
+          image: AssetImage('assets/Bg.jpg'),
           fit: BoxFit.cover,
         )
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        //appBar: getAppBar(),
-        bottomNavigationBar: getNavBar(),
-        body: Column(
-          children: <Widget>[
-            Center(
-              child: Image(
-                image: AssetImage('assets/logo.png'),
-                width: 270,
-                height: 270,
-              ),
+        bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.shifting,
+              backgroundColor: Colors.white,
+              currentIndex: _currentIndex,
+              items: getIcons(),
+              onTap: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
             ),
-            Center(
-              child: Text(
-                'insert quote',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Courier',
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                  height: 1.1,
-                ),
-              ),
-            ),
-          ],
-        ),
+        body: pageOptions[_currentIndex],
       ),
     );
   }
