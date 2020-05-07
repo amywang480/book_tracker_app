@@ -10,8 +10,9 @@ class Bookshelf extends StatefulWidget {
 class _BookshelfState extends State<Bookshelf> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Text('bookshelf'),
+    return Container(
+      decoration: getBg(),
+      child: Text('bookshelf'),
     );
   }
 }

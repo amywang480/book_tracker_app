@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 import 'bookshelf.dart';
 import 'ratings.dart';
 import 'add_books.dart';
@@ -49,10 +48,13 @@ List<BottomNavigationBarItem> getIcons() {
     ];
 }
 
-// BOOK OBJECT
-class Book {
-  String title, url;
-  Book(this.title, this.url);
+BoxDecoration getBg() {
+  return BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/Bg.jpg'),
+        fit: BoxFit.cover,
+      ),
+  );
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -64,20 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Ratings(),
   ];
 
-  List<Book> _items = new List();
-  final subject = new PublishSubject<String>();
-  bool _isLoading = false;
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/Bg.jpg'),
-          fit: BoxFit.cover,
-        )
-      ),
+      decoration: getBg(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomNavigationBar(
