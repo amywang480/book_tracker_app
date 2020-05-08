@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.cyan,
@@ -31,29 +32,36 @@ class MyHomePage extends StatefulWidget {
 List<BottomNavigationBarItem> getIcons() {
   return [
       BottomNavigationBarItem(
-        icon: new Icon(Icons.book),
-        title: new Text('Add Books'),
-        backgroundColor: Colors.cyan,
+        icon: new Icon(Icons.book, color: Colors.black),
+        title: new Text('Add Books', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.cyan[200],
       ),
       BottomNavigationBarItem(
-        icon: new Icon(Icons.collections_bookmark),
-        title: new Text('Bookshelf'),
-        backgroundColor: Colors.cyan,
+        icon: new Icon(Icons.inbox, color: Colors.black),
+        title: new Text('Bookshelf', style: TextStyle(color: Colors.black)),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.star_border),
-        title: Text('Ratings'),
-        backgroundColor: Colors.cyan,
+        icon: Icon(Icons.star_border, color: Colors.black),
+        title: Text('Ratings', style: TextStyle(color: Colors.black)),
       ),
     ];
 }
 
-BoxDecoration getBg() {
+BoxDecoration getAddBg() {
   return BoxDecoration(
       image: DecorationImage(
-        image: AssetImage('assets/Bg.jpg'),
+        image: AssetImage('assets/AddBooksBg.png'),
         fit: BoxFit.cover,
       ),
+  );
+}
+
+BoxDecoration getBg() {
+  return BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/bg.jpg'),
+      fit: BoxFit.cover,
+    ),
   );
 }
 
@@ -71,12 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: getBg(),
+      //decoration: getBg(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.shifting,
-              backgroundColor: Colors.white,
               currentIndex: _currentIndex,
               items: getIcons(),
               onTap: (index) {

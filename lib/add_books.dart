@@ -20,77 +20,137 @@ class Book {
   Book(this.title, this.url);
 }
 
-class _AddBooksState extends State<AddBooks> {
+Column getPage() {
+  return Column(
+    children: <Widget>[
+      SizedBox(
+        height: 25,
+      ),
+      Image(
+        image: AssetImage('assets/logo.png'),
+        width: 230,
+        height: 230,
+      ),
+      Center(
+        child: Text(
+          '"Insert sample quote here"\nAuthor',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'Courier',
+            fontSize: 25,
+            //fontWeight: FontWeight.bold,
+            height: 1.1,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Image(
+        image: AssetImage('assets/book.png'),
+        width: 55,
+        height: 55,
+        color: Colors.red[200],
+      ),
+      SizedBox(
+        height: 30,
+      ),
+    ],
+  );
+}
+
+InputDecoration getSearchInput() {
+  return InputDecoration(
+    enabledBorder: const OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.white, width: 1.5),
+    ),
+    prefixIcon: Icon(Icons.search, color: Colors.white),
+    hintText: 'Start searching',
+    hintStyle: TextStyle(color: Colors.white),
+    border: OutlineInputBorder(),
+  );
+}
+
+class _AddBooksState extends State<AddBooks>
+    with SingleTickerProviderStateMixin {
   List<Book> _items = new List();
   final subject = new PublishSubject<String>();
   bool _isLoading = false;
+  AnimationController _controller;
+  Animation _animation;
+  FocusNode _focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-          child: Column(
-            children: <Widget>[
-              Image(
-                image: AssetImage('assets/logo.png'),
-                width: 270,
-                height: 270,
-              ),
-              Center(
-                child: Text(
-                  '"Insert sample quote here"',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Courier',
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    height: 1.1,
-                  ),
-                ),
-              ),
-              Image(
-                image: AssetImage('assets/book.png'),
-                width: 90,
-                height: 90,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Start searching',
-                ),
-                onChanged: (string) => (subject.add(string)),
-              ),
-              _isLoading ? CircularProgressIndicator() : Container(),
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.all(8.0),
-                  itemCount: _items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
+    return Container(
+      decoration: getAddBg(),
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints:
+                    BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Theme(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            _items[index].url != null
-                                ? Image.network(_items[index].url)
-                                : Container(),
-                            Flexible(
-                              child: Text(
-                                _items[index].title,
-                                maxLines: 10,
-                              ),
-                            ),
-                          ],
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: TextField(
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                          decoration: getSearchInput(),
+                          focusNode: _focusNode,
+                          onChanged: (string) => (subject.add(string)),
                         ),
                       ),
-                    );
-                  },
+                      data:
+                          Theme.of(context).copyWith(primaryColor: Colors.white),
+                    ),
+                    _isLoading ? CircularProgressIndicator() : Container(),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(15.0),
+                        itemCount: _items.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Row(
+                                children: <Widget>[
+                                  _items[index].url != null
+                                      ? Image.network(_items[index].url)
+                                      : Container(),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Text(
+                                        _items[index].title,
+                                        style: TextStyle(
+                                          fontFamily: 'Zilla',
+                                          fontSize: 30,
+                                        ),
+                                        maxLines: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
+
+            ),
+
+
         ),
       ),
     );
@@ -99,9 +159,33 @@ class _AddBooksState extends State<AddBooks> {
   @override
   void initState() {
     super.initState();
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _animation = Tween(begin: 500.0, end: 0.0).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+
     subject.stream
         .debounceTime(Duration(milliseconds: 600))
         .listen(_textChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+
+    super.dispose();
   }
 
   void _textChanged(String text) {

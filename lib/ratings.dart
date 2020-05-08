@@ -12,13 +12,12 @@ class _RatingsState extends State<Ratings> {
   Widget build(BuildContext context) {
     return Container(
       decoration: getBg(),
-      child: Column(
-        children: <Widget>[
-          Text('ratings'),
-          Image(
-            image: AssetImage('assets/quote.png'),
-          ),
-        ],
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Text('ratings')
+          ],
+        ),
       ),
     );
   }

@@ -12,7 +12,13 @@ class _BookshelfState extends State<Bookshelf> {
   Widget build(BuildContext context) {
     return Container(
       decoration: getBg(),
-      child: Text('bookshelf'),
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Text('bookshelf')
+          ],
+        ),
+      ),
     );
   }
 }
