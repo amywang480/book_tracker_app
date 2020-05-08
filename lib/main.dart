@@ -39,10 +39,12 @@ List<BottomNavigationBarItem> getIcons() {
       BottomNavigationBarItem(
         icon: new Icon(Icons.inbox, color: Colors.black),
         title: new Text('Bookshelf', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.cyan[200],
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.star_border, color: Colors.black),
         title: Text('Ratings', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.cyan[200],
       ),
     ];
 }
@@ -56,10 +58,10 @@ BoxDecoration getAddBg() {
   );
 }
 
-BoxDecoration getBg() {
+BoxDecoration getDefaultBg() {
   return BoxDecoration(
     image: DecorationImage(
-      image: AssetImage('assets/bg.jpg'),
+      image: AssetImage('assets/Default.jpg'),
       fit: BoxFit.cover,
     ),
   );

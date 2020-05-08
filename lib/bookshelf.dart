@@ -11,7 +11,7 @@ class _BookshelfState extends State<Bookshelf> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: getBg(),
+      decoration: getDefaultBg(),
       child: Scaffold(
         body: Column(
           children: <Widget>[
